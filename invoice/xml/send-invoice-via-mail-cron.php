@@ -118,19 +118,19 @@ function send_email_with_invoices()
         }
     }
 
+    if (! empty($_REQUEST['send_email_with_invoices'])) {
+        echo '<b>WC_Order_Query args:</b>' . '<br><pre>' . print_r($args, true) . '</pre><br>';
+        echo '<b>Orders:</b>' . '<br><pre>' . print_r($orders, true) . '</pre><br>';
+        echo '<b>Attachments found:</b>' . '<br><pre>' . print_r($attachments, true) . '</pre><br>';
+        die();
+    }
+
     if (! empty($attachments)) {
         $to      = 'example@example.com'; // Destinatario dell'email
         $subject = 'Rapporto settimanale delle fatture';
         $body    = 'Questo è il tuo report settimanale con le fatture.';
         $headers = array('Content-Type: text/html; charset=UTF-8');
         wp_mail($to, $subject, $body, $headers, $attachments);
-    }
-
-    if (! empty($_REQUEST['send_email_with_invoices'])) {
-        echo '<b>WC_Order_Query args:</b>' . '<br><pre>' . print_r($args, true) . '</pre><br>';
-        echo '<b>Orders:</b>' . '<br><pre>' . print_r($orders, true) . '</pre><br>';
-        echo '<b>Attachments found:</b>' . '<br><pre>' . print_r($attachments, true) . '</pre><br>';
-        die();
     }
 }
 
