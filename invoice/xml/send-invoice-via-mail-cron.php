@@ -16,7 +16,7 @@ function get_order_xml_attachments($order_id)
             while (false !== ($file = readdir($handle))) {
                 // Controlla se il file contiene l'ID dell'ordine e ha estensione .xml
                 if (strpos($file, (string)$order_id) !== false && pathinfo($file, PATHINFO_EXTENSION) === 'xml') {
-                    // Aggiungi il percorso completo del file all'array degli allegati
+                    // Aggiungi il percorso completo
                     $attachments = $invoice_dir . $file;
                 }
             }
@@ -102,7 +102,6 @@ function send_email_with_invoices()
     $query  = new \WC_Order_Query($args);
     $orders = $query->get_orders();
 
-    $pdf         = new \WcElectronInvoice\Pdf\CreatePdf(new \Dompdf\Dompdf());
     $attachments = array();
     if (! empty($orders)) {
         foreach ($orders as $orderID) {
