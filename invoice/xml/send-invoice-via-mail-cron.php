@@ -170,25 +170,23 @@ function send_email_with_invoices()
     }
 
     if (! empty($attachments)) {
-        $custom_wp_mail_from = POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL;
-        $custom_wp_mail_from_name = POP_SEND_XML_INVOICE_EMAIL_FROM_NAME;
-
-        // Rimuovi i filtri
-        add_filter('wp_mail_from', 'custom_wp_mail_from');
-        add_filter('wp_mail_from_name', 'custom_wp_mail_from_name');
-
         $to      = POP_SEND_XML_INVOICE_EMAIL_TO;
         $subject = POP_SEND_XML_INVOICE_EMAIL_SUBJECT;
         $body    = POP_SEND_XML_INVOICE_EMAIL_BODY;
         $headers = array('Content-Type: text/html; charset=UTF-8');
-        if($send = wp_mail($to, $subject, $body, $headers, $attachments)) {
-            error_log('Email con "' . $subject . '" - inviata');
-            error_log('Allegati: ' . PHP_EOL . print_r($attachments, true));
-        }
 
-        // Rimuovi i filtri
-        remove_filter('wp_mail_from', 'custom_wp_mail_from');
-        remove_filter('wp_mail_from_name', 'custom_wp_mail_from_name');
+        if($to && $subject && $body) {
+            add_filter('wp_mail_from', 'custom_wp_mail_from');
+            add_filter('wp_mail_from_name', 'custom_wp_mail_from_name');
+
+            if($send = wp_mail($to, $subject, $body, $headers, $attachments)) {
+                error_log('Email con "' . $subject . '" - inviata');
+                error_log('Allegati: ' . PHP_EOL . print_r($attachments, true));
+            }
+
+            remove_filter('wp_mail_from', 'custom_wp_mail_from');
+            remove_filter('wp_mail_from_name', 'custom_wp_mail_from_name');
+        }
 
     } else {
         error_log('ATTENZIONE: Email con non inviata, allegati non presenti');
