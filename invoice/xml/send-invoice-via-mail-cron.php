@@ -1,4 +1,29 @@
 <?php
+define('_TEXT_DOMAIN_', 'pop_send_email_whit_xml');
+
+if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME')) {
+    define('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME', get_bloginfo('name'));
+}
+if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL')) {
+    define('POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL', 'noreplay@woopop.it');
+}
+if(! defined('POP_SEND_XML_INVOICE_EMAIL_TO')) {
+    define('POP_SEND_XML_INVOICE_EMAIL_TO', 'alfio.piccione@gmail.com');
+}
+if(! defined('POP_SEND_XML_INVOICE_EMAIL_SUBJECT')) {
+    define('POP_SEND_XML_INVOICE_EMAIL_SUBJECT', __('Rapporto settimanale delle fatture', _TEXT_DOMAIN_));
+}
+if(! defined('POP_SEND_XML_INVOICE_EMAIL_BODY')) {
+    define('POP_SEND_XML_INVOICE_EMAIL_BODY', __('Questo è il tuo report settimanale con le fatture.', _TEXT_DOMAIN_));
+}
+
+function custom_wp_mail_from($default) {
+    return POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL; // L'email personalizzata
+}
+
+function custom_wp_mail_from_name($default) {
+    return POP_SEND_XML_INVOICE_EMAIL_FROM_NAME; // Il nome del mittente personalizzato
+}
 
 // Funzione per gli allegati
 function get_order_xml_attachments($order_id)
@@ -135,11 +160,28 @@ function send_email_with_invoices()
     }
 
     if (! empty($attachments)) {
-        $to      = 'example@example.com'; // Destinatario dell'email
-        $subject = 'Rapporto settimanale delle fatture';
-        $body    = 'Questo è il tuo report settimanale con le fatture.';
+        $custom_wp_mail_from = POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL;
+        $custom_wp_mail_from_name = POP_SEND_XML_INVOICE_EMAIL_FROM_NAME;
+
+        // Rimuovi i filtri
+        add_filter('wp_mail_from', 'custom_wp_mail_from');
+        add_filter('wp_mail_from_name', 'custom_wp_mail_from_name');
+
+        $to      = POP_SEND_XML_INVOICE_EMAIL_TO;
+        $subject = POP_SEND_XML_INVOICE_EMAIL_SUBJECT;
+        $body    = POP_SEND_XML_INVOICE_EMAIL_BODY;
         $headers = array('Content-Type: text/html; charset=UTF-8');
-        wp_mail($to, $subject, $body, $headers, $attachments);
+        if($send = wp_mail($to, $subject, $body, $headers, $attachments)) {
+            error_log('Email con "' . $subject . '" - inviata');
+            error_log('Allegati: ' . PHP_EOL . print_r($attachments, true));
+        }
+
+        // Rimuovi i filtri
+        remove_filter('wp_mail_from', 'custom_wp_mail_from');
+        remove_filter('wp_mail_from_name', 'custom_wp_mail_from_name');
+
+    } else {
+        error_log('ATTENZIONE: Email con non inviata, allegati non presenti');
     }
 }
 
