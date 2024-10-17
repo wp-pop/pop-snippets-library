@@ -4,6 +4,16 @@ define('_TEXT_DOMAIN_', 'pop_send_email_whit_xml');
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME')) {
     define('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME', get_bloginfo('name'));
 }
+if(! defined('POP_SEND_XML_INVOICE_DAY_OF_WEEK')) {
+    define('POP_SEND_XML_INVOICE_DAY_OF_WEEK', 5); // Venerdì
+}
+if(! defined('POP_SEND_XML_INVOICE_TIME_OF_DAY')) {
+    define('POP_SEND_XML_INVOICE_TIME_OF_DAY', "23:00:00"); // Ore 23:00:00
+}
+
+if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME')) {
+    define('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME', get_bloginfo('name'));
+}
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL')) {
     define('POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL', 'noreplay@woopop.it');
 }
@@ -70,8 +80,8 @@ add_action('init', 'schedule_email_cron');
 function schedule_email_cron()
 {
     // Scegli il giorno della settimana (1 = Lunedì, 7 = Domenica) e l'orario
-    $day_of_week = 2; // 1 = Lunedì, 2 = Martedì, ecc...
-    $time        = '10:00:00'; // Orario 10:00 AM
+    $day_of_week = POP_SEND_XML_INVOICE_DAY_OF_WEEK; // 1 = Lunedì, 2 = Martedì, ecc...
+    $time        = POP_SEND_XML_INVOICE_TIME_OF_DAY; // Orario es: 10:00 AM
 
     // Recupera il timezone configurato in WordPress
     $timezone = wp_timezone();
