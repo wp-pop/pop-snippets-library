@@ -48,9 +48,12 @@ function schedule_email_cron()
     $day_of_week = 2; // 1 = Lunedì, 2 = Martedì, ecc...
     $time        = '10:00:00'; // Orario 10:00 AM
 
-    // Calcola il timestamp del prossimo invio
-    $now                 = current_time('timestamp');
-    $current_day_of_week = date('N', $now); // Giorno della settimana corrente (1 = Lunedì, 7 = Domenica)
+    // Recupera il timezone configurato in WordPress
+    $timezone = wp_timezone();
+
+    // Ottieni la data e l'ora corrente con il timezone di WordPress
+    $now = new DateTime('now', $timezone);
+    $current_day_of_week = (int) $now->format('N'); // Giorno della settimana corrente (1 = Lunedì, 7 = Domenica)
 
     // Calcola la differenza in giorni tra oggi e il prossimo giorno desiderato
     if ($current_day_of_week <= $day_of_week) {
@@ -61,12 +64,18 @@ function schedule_email_cron()
         $days_until_next_event = 7 - ($current_day_of_week - $day_of_week);
     }
 
-    // Timestamp per il prossimo evento
-    $scheduled_time = strtotime("+$days_until_next_event days $time", $now);
+    // Calcola la data del prossimo evento basandosi sul timezone di WordPress
+    $scheduled_date = $now->modify("+$days_until_next_event days")->format('Y-m-d') . ' ' . $time;
+
+    // Crea l'oggetto DateTime per il prossimo evento
+    $scheduled_time = new DateTime($scheduled_date, $timezone);
+
+    // Converte l'oggetto DateTime in timestamp
+    $scheduled_timestamp = $scheduled_time->getTimestamp();
 
     // Pianifica solo se non è già pianificato
     if (! wp_next_scheduled('sendEmailWithInvoicesByDay')) {
-        wp_schedule_event($scheduled_time, 'weekly_custom', 'sendEmailWithInvoicesByDay');
+        wp_schedule_event($scheduled_timestamp, 'weekly_custom', 'sendEmailWithInvoicesByDay');
     }
 }
 
