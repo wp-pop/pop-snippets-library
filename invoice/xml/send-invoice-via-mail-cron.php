@@ -1,5 +1,7 @@
 <?php
-define('_TEXT_DOMAIN_', 'pop_send_email_whit_xml');
+if(! defined('_POP_SEND_XML_TEXT_DOMAIN_')) {
+    define('_POP_SEND_XML_TEXT_DOMAIN_', 'pop_send_email_whit_xml');
+}
 
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME')) {
     define('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME', get_bloginfo('name'));
@@ -21,10 +23,10 @@ if(! defined('POP_SEND_XML_INVOICE_EMAIL_TO')) {
     define('POP_SEND_XML_INVOICE_EMAIL_TO', 'alfio.piccione@gmail.com');
 }
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_SUBJECT')) {
-    define('POP_SEND_XML_INVOICE_EMAIL_SUBJECT', __('Rapporto settimanale delle fatture', _TEXT_DOMAIN_));
+    define('POP_SEND_XML_INVOICE_EMAIL_SUBJECT', __('Rapporto settimanale delle fatture', _POP_SEND_XML_TEXT_DOMAIN_));
 }
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_BODY')) {
-    define('POP_SEND_XML_INVOICE_EMAIL_BODY', __('Questo è il tuo report settimanale con le fatture.', _TEXT_DOMAIN_));
+    define('POP_SEND_XML_INVOICE_EMAIL_BODY', __('Questo è il tuo report settimanale con le fatture.', _POP_SEND_XML_TEXT_DOMAIN_));
 }
 
 function custom_wp_mail_from($default) {
