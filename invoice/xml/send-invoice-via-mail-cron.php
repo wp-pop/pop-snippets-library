@@ -17,7 +17,7 @@ if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME')) {
     define('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME', get_bloginfo('name'));
 }
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL')) {
-    define('POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL', 'noreplay@woopop.it');
+    define('POP_SEND_XML_INVOICE_EMAIL_FROM_EMAIL', 'noreply@woopop.it');
 }
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_TO')) {
     define('POP_SEND_XML_INVOICE_EMAIL_TO', 'alfio.piccione@gmail.com');
