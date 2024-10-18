@@ -149,11 +149,14 @@ function send_email_with_invoices()
     $orders = $query->get_orders();
 
     $attachments = array();
+    $checkSentInvoice = array();
+
     if (! empty($orders)) {
         foreach ($orders as $orderID) {
             // it's useless but I'll check
             $checkSent = \WcElectronInvoice\Functions\getPostMeta('_invoice_sent', null, $orderID);
             if ('sent' === $checkSent) {
+                $checkSentInvoice[] = 1;
                 continue;
             }
 
@@ -191,7 +194,11 @@ function send_email_with_invoices()
         }
 
     } else {
-        error_log('ATTENZIONE: Email con non inviata, allegati non presenti');
+        if(empty($checkSentInvoice)) {
+            error_log('Le fatture sono state già tutte segnate come inviate');
+        } else {
+            error_log('ATTENZIONE: Email con non inviata, allegati non presenti');
+        }
     }
 }
 
