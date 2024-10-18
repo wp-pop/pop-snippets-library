@@ -2,7 +2,6 @@
 if(! defined('_POP_SEND_XML_TEXT_DOMAIN_')) {
     define('_POP_SEND_XML_TEXT_DOMAIN_', 'pop_send_email_whit_xml');
 }
-
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME')) {
     define('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME', get_bloginfo('name'));
 }
@@ -12,7 +11,6 @@ if(! defined('POP_SEND_XML_INVOICE_DAY_OF_WEEK')) {
 if(! defined('POP_SEND_XML_INVOICE_TIME_OF_DAY')) {
     define('POP_SEND_XML_INVOICE_TIME_OF_DAY', "23:00:00"); // Ore 23:00:00
 }
-
 if(! defined('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME')) {
     define('POP_SEND_XML_INVOICE_EMAIL_FROM_NAME', get_bloginfo('name'));
 }
@@ -149,6 +147,7 @@ function send_email_with_invoices()
     $orders = $query->get_orders();
 
     $attachments = array();
+    $ordersIDS = array();
     $checkSentInvoice = array();
 
     if (! empty($orders)) {
@@ -163,6 +162,7 @@ function send_email_with_invoices()
             $xml = get_order_xml_attachments($orderID);
             if ($xml) {
                 $attachments[] = $xml;
+                $ordersIDS[] = $orderID;
             }
         }
     }
@@ -187,6 +187,15 @@ function send_email_with_invoices()
             if($send = wp_mail($to, $subject, $body, $headers, $attachments)) {
                 error_log('Email con "' . $subject . '" - inviata');
                 error_log('Allegati: ' . PHP_EOL . print_r($attachments, true));
+
+                // Set _invoice_sent = sent
+                foreach ($ordersIDS as $id) {
+                    // Set invoice sent
+                    $order = wc_get_order(intval($id));
+                    $order->update_meta_data('_invoice_sent', 'sent');
+                    // Save
+                    $order->save();
+                }
             }
 
             remove_filter('wp_mail_from', 'custom_wp_mail_from');
@@ -194,7 +203,7 @@ function send_email_with_invoices()
         }
 
     } else {
-        if(empty($checkSentInvoice)) {
+        if(! empty($checkSentInvoice)) {
             error_log('Le fatture sono state già tutte segnate come inviate');
         } else {
             error_log('ATTENZIONE: Email con non inviata, allegati non presenti');
