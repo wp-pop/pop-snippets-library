@@ -13,7 +13,6 @@
  * https://wp-pop.com/create-a-plugin-for-pop-customizations/
  */
 
-
 add_filter('wc_el_inv-invoice_pdf_logo_url', '__return_false');
 
 add_filter('wc_el_inv-invoice_pdf_logo_text', function ($text){

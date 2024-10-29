@@ -1,7 +1,18 @@
 <?php
 /**
- * Set _invoice_sent on invoice created to invoice upload dir
+ * Imposta la fattura come inviata quando viene creata nella dir uploads
+ *
+ * title: Imposta la fattura come inviata
+ * layout: snippet
+ * collection: invoice/table
+ * category: invoice
+ *
+ * You can add this recipe to your site by creating a custom plugin
+ * or using the Code Snippets plugin available for free in the WordPress repository.
+ * Read this companion article for step-by-step directions on either method.
+ * https://wp-pop.com/create-a-plugin-for-pop-customizations/
  */
+
 add_filter('wc_el_inv-invoice_create_xml_by_order_status_file', function (
     $file,
     $uploadDir,
