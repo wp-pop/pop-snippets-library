@@ -40,7 +40,7 @@ function custom_wp_mail_from_name( $default ) {
 function get_order_xml_attachments( $order_id ) {
     // Imposta la directory degli allegati
     $upload_dir  = wp_upload_dir();
-    $invoice_dir = $upload_dir['basedir'] . '/woopop-invoice/';
+    $invoice_dir = $upload_dir['basedir'] . '/pop-invoice/';
 
     $attachments = null;
     // Cerca tutti i file XML con l'ID dell'ordine nel nome
