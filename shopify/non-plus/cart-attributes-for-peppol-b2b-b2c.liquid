@@ -1,0 +1,106 @@
+{% comment %} PopCartAttributes {% endcomment %}
+{%- assign pop_customer_type = cart.attributes.pop_customer_type | default: 'private' -%}
+{%- assign pop_vat = cart.attributes.pop_vat | default: '' -%}
+<div id="PopCartAttributesPEPPOL" class="pop-cart-attributes">
+  <div class="pop-cart-attributes__group">
+    <label for="PopCustomerType">Customer type</label>
+    <select
+      id="PopCustomerType"
+      name="attributes[pop_customer_type]"
+      form="cart"
+    >
+      <option value="private" {% if pop_customer_type == 'private' %}selected{% endif %}>Private (B2C)</option>
+      <option value="company" {% if pop_customer_type == 'company' %}selected{% endif %}>Business (B2B - PEPPOL)</option>
+    </select>
+  </div>
+  <div class="pop-cart-attributes__group" id="PopVatGroup">
+    <label for="PopVat">VAT Number (with country prefix)</label>
+    <input
+      type="text"
+      id="PopVat"
+      name="attributes[pop_vat]"
+      value="{{ pop_vat }}"
+      placeholder="DE123456789"
+      form="cart"
+    >
+  </div>
+</div>
+<style>
+  .pop-cart-attributes {
+    margin-block: 1.5rem;
+    margin-inline: auto 0;
+    padding: 1.25rem;
+    border: 1px solid #dfe3e8;
+    border-radius: 0.5rem;
+    background: #fafbfc;
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: 0 1px 2px rgba(22, 29, 37, 0.08);
+  }
+  @media (min-width: 768px) {
+    .pop-cart-attributes {
+      max-width: 400px;
+    }
+  }
+  .pop-cart-attributes label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+    color: #1f2328;
+  }
+  .pop-cart-attributes input,
+  .pop-cart-attributes select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #c9cccf;
+    border-radius: 0.4rem;
+    background: #fff;
+    font-size: 1.4rem;
+    color: #202223;
+    box-shadow: inset 0 1px 2px rgba(22, 29, 37, 0.06);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pop-cart-attributes input:focus,
+  .pop-cart-attributes select:focus {
+    border-color: #008060;
+    box-shadow: 0 0 0 1px #00806040, inset 0 1px 2px rgba(22, 29, 37, 0.06);
+    outline: none;
+  }
+  .hidden { display: none !important; }
+</style>
+<script>
+  (function() {
+    const container = document.getElementById('PopCartAttributesPEPPOL');
+    const select = container.querySelector('#PopCustomerType');
+    const vatGroup = container.querySelector('#PopVatGroup');
+    const vatInput = container.querySelector('#PopVat');
+    function toggleFields() {
+      const isCompany = select.value === 'company';
+      if (isCompany) {
+        vatGroup.classList.remove('hidden');
+        vatInput.required = true;
+      } else {
+        vatGroup.classList.add('hidden');
+        vatInput.required = false;
+        vatInput.value = ''; // reset VAT for B2C
+      }
+    }
+    select.addEventListener('change', toggleFields);
+    toggleFields();
+    // Simple VAT format validation
+    vatInput.addEventListener('blur', () => {
+      const value = vatInput.value.trim();
+      const valid = /^[A-Z]{2}[0-9A-Za-z]{8,12}$/.test(value);
+      if (!valid && value !== '') {
+        vatInput.setCustomValidity('Please enter a valid VAT number with country prefix (e.g. DE123456789).');
+      } else {
+        vatInput.setCustomValidity('');
+      }
+    });
+  })();
+</script>
+{% comment %} PopCartAttributes {% endcomment %}

@@ -1,0 +1,131 @@
+{% comment %} PopCartAttributes {% endcomment %}
+{%- assign pop_customer_type = cart.attributes.pop_customer_type | default: 'private' -%}
+{%- assign pop_vat = cart.attributes.pop_vat | default: '' -%}
+{%- assign pop_tax_code = cart.attributes.pop_tax_code | default: '' -%}
+{%- assign pop_pec = cart.attributes.pop_pec | default: '' -%}
+<div id="PopCartAttributes" class="pop-cart-attributes">
+  <div class="pop-cart-attributes__group">
+    <label for="PopCustomerType">Tipo cliente</label>
+    <select
+      id="PopCustomerType"
+      name="attributes[pop_customer_type]"
+      form="cart"
+    >
+      <option value="private"   {% if pop_customer_type == 'private' %}selected{% endif %}>Privato</option>
+      <option value="company"   {% if pop_customer_type == 'company' %}selected{% endif %}>Azienda</option>
+      <option value="freelance" {% if pop_customer_type == 'freelance' %}selected{% endif %}>Libero professionista</option>
+    </select>
+  </div>
+  <div class="pop-cart-attributes__group" data-company-fields>
+    <label for="PopVat">Partita IVA</label>
+    <input
+      type="text"
+      id="PopVat"
+      name="attributes[pop_vat]"
+      value="{{ pop_vat }}"
+      placeholder="IT12345678901"
+      form="cart"
+    >
+  </div>
+  <div class="pop-cart-attributes__group">
+    <label for="PopTaxCode">Codice fiscale</label>
+    <input
+      type="text"
+      id="PopTaxCode"
+      name="attributes[pop_tax_code]"
+      value="{{ pop_tax_code }}"
+      placeholder="RSSMRA80A01H501Z"
+      form="cart"
+    >
+  </div>
+  <div class="pop-cart-attributes__group" data-company-fields>
+    <label for="PopPec">E-mail PEC o Codice Destinatario</label>
+    <input
+      type="email"
+      id="PopPec"
+      name="attributes[pop_pec]"
+      value="{{ pop_pec }}"
+      placeholder="tua@pec.it - Z4G7P1Q"
+      form="cart"
+    >
+  </div>
+</div>
+<style>
+  .pop-cart-attributes {
+    margin-block: 1.5rem;
+    margin-inline: auto 0;
+    padding: 1.25rem;
+    border: 1px solid #dfe3e8;
+    border-radius: 0.5rem;
+    background: #fafbfc;
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: 0 1px 2px rgba(22, 29, 37, 0.08);
+  }
+  @media (min-width: 680px) {
+    .pop-cart-attributes {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  }
+  @media (min-width: 768px) {
+    .pop-cart-attributes {
+      max-width: 400px;
+    }
+  }
+  .pop-cart-attributes label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: #1f2328;
+  }
+  .pop-cart-attributes select,
+  .pop-cart-attributes input {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #c9cccf;
+    border-radius: 0.4rem;
+    background: #fff;
+    font-size: 1.4rem;
+    color: #202223;
+    box-shadow: inset 0 1px 2px rgba(22, 29, 37, 0.06);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pop-cart-attributes select:focus,
+  .pop-cart-attributes input:focus {
+    border-color: #008060;
+    box-shadow: 0 0 0 1px #00806040, inset 0 1px 2px rgba(22, 29, 37, 0.06);
+    outline: none;
+  }
+  .pop-cart-attributes__group {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+<script>
+  (function () {
+    const container = document.getElementById('PopCartAttributes');
+    if (!container) return;
+    const select = container.querySelector('[name="attributes[pop_customer_type]"]');
+    const companyFields = container.querySelectorAll('[data-company-fields]');
+    function toggleCompanyFields() {
+      const needsCompanyFields = ['company', 'freelance'].includes(select.value);
+      companyFields.forEach((block) => {
+        const input = block.querySelector('input');
+        if (needsCompanyFields) {
+          block.classList.remove('hidden');
+          if (input) input.setAttribute('required', 'required');
+        } else {
+          block.classList.add('hidden');
+          if (input) input.removeAttribute('required');
+        }
+      });
+    }
+    select.addEventListener('change', toggleCompanyFields);
+    toggleCompanyFields();
+  })();
+</script>
+{% comment %} PopCartAttributes {% endcomment %}
