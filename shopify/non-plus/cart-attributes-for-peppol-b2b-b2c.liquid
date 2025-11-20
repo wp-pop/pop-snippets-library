@@ -55,6 +55,7 @@
   .pop-cart-attributes select {
     width: 100%;
     min-height: 44px;
+    height: auto !important;
     padding: 0.65rem 0.85rem;
     border: 1px solid #c9cccf;
     border-radius: 0.4rem;
@@ -70,7 +71,7 @@
     box-shadow: 0 0 0 1px #00806040, inset 0 1px 2px rgba(22, 29, 37, 0.06);
     outline: none;
   }
-  .hidden { display: none !important; }
+  .pop-hidden { display: none !important; }
 </style>
 <script>
   (function() {
@@ -81,10 +82,10 @@
     function toggleFields() {
       const isCompany = select.value === 'company';
       if (isCompany) {
-        vatGroup.classList.remove('hidden');
+        vatGroup.classList.remove('pop-hidden');
         vatInput.required = true;
       } else {
-        vatGroup.classList.add('hidden');
+        vatGroup.classList.add('pop-hidden');
         vatInput.required = false;
         vatInput.value = ''; // reset VAT for B2C
       }
