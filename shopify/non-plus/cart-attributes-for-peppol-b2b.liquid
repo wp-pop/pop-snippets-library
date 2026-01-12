@@ -1,6 +1,10 @@
 {% comment %} PopCartAttributes {% endcomment %}
 {%- assign pop_customer_type = 'company' -%}
-{%- assign pop_vat = cart.attributes.pop_vat | default: '' -%}
+
+{%- assign pop_vat = cart.attributes.pop_vat
+| default: customer.metafields.app.pop_vat 
+| default: '' -%}
+
 <div id="PopCartAttributesPEPPOL" class="pop-cart-attributes">
   <input type="hidden" name="attributes[pop_customer_type]" value="company" form="cart">
   <div class="pop-cart-attributes__group">
