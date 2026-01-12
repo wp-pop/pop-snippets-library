@@ -1,6 +1,12 @@
 {% comment %} PopCartAttributes {% endcomment %}
-{%- assign pop_customer_type = cart.attributes.pop_customer_type | default: 'private' -%}
-{%- assign pop_vat = cart.attributes.pop_vat | default: '' -%}
+
+{%- assign pop_customer_type = cart.attributes.pop_customer_type
+    | default: customer.metafields.app.pop_customer_type
+    | default: 'private' -%}
+  {%- assign pop_vat = cart.attributes.pop_vat
+    | default: customer.metafields.app.pop_vat
+    | default: '' -%}
+
 <div id="PopCartAttributesPEPPOL" class="pop-cart-attributes">
   <div class="pop-cart-attributes__group">
     <label for="PopCustomerType">Customer type</label>
