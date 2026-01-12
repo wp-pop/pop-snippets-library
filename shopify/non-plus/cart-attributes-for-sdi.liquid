@@ -1,8 +1,18 @@
 {% comment %} PopCartAttributes {% endcomment %}
-{%- assign pop_customer_type = cart.attributes.pop_customer_type | default: 'private' -%}
-{%- assign pop_vat = cart.attributes.pop_vat | default: '' -%}
-{%- assign pop_tax_code = cart.attributes.pop_tax_code | default: '' -%}
-{%- assign pop_pec = cart.attributes.pop_pec | default: '' -%}
+
+{%- assign pop_customer_type = cart.attributes.pop_customer_type
+    | default: customer.metafields.app.pop_customer_type
+    | default: 'private' -%}
+  {%- assign pop_vat = cart.attributes.pop_vat
+    | default: customer.metafields.app.pop_vat
+    | default: '' -%}
+  {%- assign pop_tax_code = cart.attributes.pop_tax_code
+    | default: customer.metafields.app.pop_tax_code
+    | default: '' -%}
+  {%- assign pop_pec = cart.attributes.pop_pec
+    | default: customer.metafields.app.pop_pec
+    | default: '' -%}
+
 <div id="PopCartAttributes" class="pop-cart-attributes">
   <div class="pop-cart-attributes__group">
     <label for="PopCustomerType">Tipo cliente</label>
