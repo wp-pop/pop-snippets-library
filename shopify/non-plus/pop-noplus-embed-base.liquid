@@ -1,24 +1,23 @@
 <script>
   window.POP_EMBED_CONFIG = {
-    // Modalità: 'sdi' (Italia, PEC/SDI e CF per privati) oppure 'peppol' (UE, niente PEC/SDI).
+    // Mode: 'sdi' (Italy, PEC/SDI and Tax Code for private) or 'peppol' (EU, no PEC/SDI).
     mode: 'sdi',
-    // Scope: 'b2b' per forzare azienda; 'b2b+b2c' per mostrare il selettore (private/company/freelance).
+    // Scope: 'b2b' forces company; 'b2b+b2c' shows the selector (private/company/freelance).
     scope: 'b2b+b2c',
-    // Contenitore nel cart page:
+    // Container on the cart page:
     cartContainerSelector: '.cart__blocks',
-    // Contenitori del drawer (solo fuori da /cart):
+    // Drawer containers (only outside /cart):
     drawerContainers: [
       // { selector: '.drawer__footer', insertMode: 'prepend' }
-    ],
-    // Posizione rispetto al container cart: append | prepend | before | after
+    // Position relative to the cart container: append | prepend | before | after
     insertMode: 'prepend',
-    // Opzioni del select (ordina o limita i valori; default: private, company, freelance)
+    // Select options (order or limit values; default: private, company, freelance)
     customerOptions: ['private','company','freelance'],
-    // Name del select (lascia così se non serve cambiarlo)
+    // Select name (leave as is if you don't need to change it)
     selectName: 'attributes[pop_customer_type]',
-    // Toggle opzionale per mostrare/nascondere i campi
+    // Optional toggle to show/hide fields
     toggle: { enabled: true, label: 'Add billing details' },
-    // Prefill inline (cart.attributes prima, poi metafield cliente)
+    // Inline prefill (cart.attributes first, then customer metafields)
     prefill: {
       customerType: '{{ cart.attributes.pop_customer_type
         | default: customer.metafields.app.pop_customer_type
