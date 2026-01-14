@@ -1,0 +1,42 @@
+<script>
+  window.POP_EMBED_CONFIG = {
+    // Modalità: 'sdi' (Italia, PEC/SDI e CF per privati) oppure 'peppol' (UE, niente PEC/SDI).
+    mode: 'sdi',
+    // Scope: 'b2b' per forzare azienda; 'b2b+b2c' per mostrare il selettore (private/company/freelance).
+    scope: 'b2b+b2c',
+    // Contenitore nel cart page:
+    cartContainerSelector: '.cart__blocks',
+    // Contenitori del drawer (solo fuori da /cart):
+    drawerContainers: [
+      // { selector: '.drawer__footer', insertMode: 'prepend' }
+    ],
+    // Posizione rispetto al container cart: append | prepend | before | after
+    insertMode: 'append',
+    // Opzioni del select (ordina o limita i valori; default: private, company, freelance)
+    customerOptions: ['private','company','freelance'],
+    // Name del select (lascia così se non serve cambiarlo)
+    selectName: 'attributes[pop_customer_type]',
+    // Toggle opzionale per mostrare/nascondere i campi
+    toggle: { enabled: true, label: 'Add billing details' },
+    // Prefill inline (cart.attributes prima, poi metafield cliente)
+    prefill: {
+      customerType: '{{ cart.attributes.pop_customer_type
+        | default: customer.metafields.app.pop_customer_type
+        | default: "private"
+        | escape }}',
+      vat: '{{ cart.attributes.pop_vat
+        | default: customer.metafields.app.pop_vat
+        | default: ""
+        | escape }}',
+      taxCode: '{{ cart.attributes.pop_tax_code
+        | default: customer.metafields.app.pop_tax_code
+        | default: ""
+        | escape }}',
+      pec: '{{ cart.attributes.pop_pec
+        | default: customer.metafields.app.pop_pec
+        | default: ""
+        | escape }}'
+    }
+  };
+</script>
+<script defer src="https://pub.popapi.io/shopify/scripts/pop-noplus-embed.min.js"></script>
